@@ -1,13 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react'
+
 
 function App() {
+
+  const [message, setMessage] = useState('')
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:5000/hello', {
+      method:'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.text())
+      .then(data => setMessage(data))
+      .catch(error => console.error('Error:', error));
+  }, [])
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <div classname="App">
-          <h1>Hello, World!</h1>
+          <h1>Message is: {message}</h1>
         </div>
       </header>
     </div>
