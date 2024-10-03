@@ -1,112 +1,133 @@
 // Variables
-$primary-color: #2b3a42;   // Dark Navy for backgrounds and footers
+$primary-color: #2b3a42; // Dark Navy for backgrounds and footers
 $secondary-color: #4db8b4; // Teal for accents and hover effects
 $background-color: #e6f2f2; // Soft teal-gray background for a unique, consistent look
-$text-color: #f1f1f1;      // Off-white for text on dark backgrounds
-$hover-color: #f1c40f;     // Golden yellow for a more visible hover state
-$accent-color: #4db8b4;    // Teal for highlights
-$text-color-dark: #2b3a42;  // Dark navy for paragraph text (darker for readability)
+$text-color: #f1f1f1; // Off-white for text on dark backgrounds
+$hover-color: #f1c40f; // Golden yellow for a more visible hover state
+$accent-color: #4db8b4; // Teal for highlights
+$text-color-dark: #2b3a42; // Dark navy for paragraph text (darker for readability)
 
-// Base body styling
-html, body {
-  background-color: $background-color; // Soft, unique background color
-  font-family: 'Roboto', sans-serif;
-  color: $primary-color;
+/* Basic responsive layout */
+body,
+html {
   margin: 0;
   padding: 0;
+  font-family: Roboto, sans-serif;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-// Header
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header,
+.footer {
+  background-color: $primary-color;
+  color: $text-color;
+  padding: 1rem;
+  text-align: center;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 50px;
-  background-color: $primary-color;
-  color: $text-color;
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
 }
 
-.company-name {
-  font-size: 1.8em;
-  font-weight: bold;
-  color: $text-color;
-}
-
-// Header Menu
-.header-menu ul {
-  list-style: none;
+.menu {
   display: flex;
 }
 
-.header-menu ul li {
-  margin-left: 40px;
+.menu ul {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
 }
 
-.header-menu ul li a {
+.menu ul li a {
   color: $text-color;
   text-decoration: none;
   font-size: 1.2em;
   transition: color 0.3s ease;
 }
 
-.header-menu ul li a:hover {
+.menu ul li a:hover {
   color: $hover-color; // Golden yellow hover effect for better contrast
   text-decoration: underline;
 }
 
-.layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Ensure the layout takes at least the full height of the viewport */
-}
-
 .content {
-  flex: 1; /* This allows the content to grow and take available space */
+  flex-grow: 1;
+  padding: 1rem;
 }
 
-.content p {
-  text-align: center; /* Align text to the center */
-  font-size: 1.0rem; /* Adjust the font size */
-  font-weight: 400;
-  color: #333; /* Set a subtle text color */
-  line-height: 1.6; /* Improve readability with better line spacing */
-  margin: 0 auto; /* Add space around the paragraph */
-  padding: 40 20px; /* Optional: Add some padding for better appearance */
-  font-family: 'Roboto', sans-serif;
-  max-width: 800px;
-  margin-bottom: 20px;
-
+.homecontent {
   /* Animation styles */
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeInUp 1.5s ease-out forwards; /* Duration and easing */
+  animation: fadeInUp 1.5s ease-out forwards;
+  /* Duration and easing */
 }
 
+footer {
+  margin-top: auto; /* Pushes the footer to the bottom */
+}
 
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(20px); /* Starts slightly below */
+    transform: translateY(20px);
+    /* Starts slightly below */
   }
+
   100% {
     opacity: 1;
-    transform: translateY(0); /* Ends at its original position */
+    transform: translateY(0);
+    /* Ends at its original position */
   }
 }
 
-// Footer
 .footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 50px;
-  background-color: $primary-color;
-  color: $text-color;
-  max-width: 1200px;
+  position: relative;
+  bottom: 0;
   width: 100%;
-  margin: 0 auto;
-  text-align: center;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .menu {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .content {
+    padding: 0.5rem;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  header {
+    font-size: 1.2rem;
+  }
+
+  .menu {
+    gap: 1rem;
+  }
+
+  .menu li {
+    display: block;
+  }
+
+  footer {
+    font-size: 0.9rem;
+  }
 }

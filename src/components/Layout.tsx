@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
     return (
-        <div className="layout">
+        <div className="container">
             <Header />
             <main className="content">
                 {children}
