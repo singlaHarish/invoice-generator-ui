@@ -7,74 +7,47 @@ $hover-color: #f1c40f; // Golden yellow for a more visible hover state
 $accent-color: #4db8b4; // Teal for highlights
 $text-color-dark: #2b3a42; // Dark navy for paragraph text (darker for readability)
 
-/* Basic responsive layout */
-body,
-html {
-  margin: 0;
-  padding: 0;
-  font-family: Roboto, sans-serif;
+html, body {
   height: 100%;
+  margin: 0;
+}
+
+.App {
+  font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-.container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+main {
+  flex-grow: 1;
 }
 
-.header,
-.footer {
-  background-color: $primary-color;
-  color: $text-color;
-  padding: 1rem;
-  text-align: center;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.menu {
-  display: flex;
-}
-
-.menu ul {
-  display: flex;
-  list-style: none;
-  gap: 1rem;
-}
-
-.menu ul li a {
-  color: $text-color;
-  text-decoration: none;
-  font-size: 1.2em;
+.menu-links {
+  font-size: 1.0em;
   transition: color 0.3s ease;
 }
 
-.menu ul li a:hover {
+.menu-links a:hover {
   color: $hover-color; // Golden yellow hover effect for better contrast
   text-decoration: underline;
 }
 
-.content {
-  flex-grow: 1;
-  padding: 1rem;
+h1 {
+  font-size: 2.5rem;
+  color: #007bff;
 }
 
-.homecontent {
+p {
+  font-size: 1.2rem;
+}
+
+.welcomepage {
   /* Animation styles */
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 1.5s ease-out forwards;
   /* Duration and easing */
-}
-
-footer {
-  margin-top: auto; /* Pushes the footer to the bottom */
 }
 
 @keyframes fadeInUp {
@@ -91,43 +64,16 @@ footer {
   }
 }
 
-.footer {
-  position: relative;
-  bottom: 0;
+footer {
+  padding: 1rem 0;
   width: 100%;
+  margin-top: auto;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-  }
-
-  .menu {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .content {
-    padding: 0.5rem;
-  }
 }
 
 /* Small Mobile Devices */
 @media (max-width: 480px) {
-  header {
-    font-size: 1.2rem;
-  }
-
-  .menu {
-    gap: 1rem;
-  }
-
-  .menu li {
-    display: block;
-  }
-
-  footer {
-    font-size: 0.9rem;
-  }
 }
