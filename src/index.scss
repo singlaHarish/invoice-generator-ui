@@ -1,3 +1,7 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap');
+
+
 // Variables
 $primary-color: #2b3a42; // Dark Navy for backgrounds and footers
 $secondary-color: #4db8b4; // Teal for accents and hover effects
@@ -12,7 +16,7 @@ html, body {
   margin: 0;
 }
 
-.App {
+.home {
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
@@ -33,9 +37,13 @@ main {
   text-decoration: underline;
 }
 
-h1 {
+.content {
+  font-family: "Merienda", cursive;
+}
+
+h2 {
   font-size: 2.5rem;
-  color: #007bff;
+  color: $text-color-dark;
 }
 
 p {
@@ -65,8 +73,6 @@ p {
 }
 
 footer {
-  padding: 1rem 0;
-  width: 100%;
   margin-top: auto;
 }
 

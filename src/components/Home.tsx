@@ -6,13 +6,13 @@ import Footer from "./Footer";
 
 const Home = () => {
     return (
-        <div>
+        <div className="home">
             <Header />
             <main>
-                <Container className="mt-5">
+                <Container className="mt-5 content">
                     <Row>
                         <Col>
-                            <h1>Welcome to our easy-to-use invoice generator, designed specifically for small shopkeepers.</h1>
+                            <h2>Welcome to our easy-to-use invoice generator, designed specifically for small shopkeepers!</h2>
                         </Col>
                         <p className="welcomepage">
                             With our tool, you can quickly create proessional invoices by simply inputting the items purchased by your customers.
