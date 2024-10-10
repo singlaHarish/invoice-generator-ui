@@ -10,9 +10,9 @@ const Header = () => {
                 <NavbarToggle aria-controls="basic-navbar-nav" />
                 <NavbarCollapse id="basic-navbar-nav">
                     <Nav className="ms-auto menu-links">
-                        <Link className="nav-link" to="/">Home</Link>
-                        <Link className="nav-link" to="/generate">Generate Invoice</Link>
-                        <Link className="nav-link" to="/contactus">ContactUs</Link>
+                        <NavLink as={Link} to="/home">Home</NavLink>
+                        <NavLink as={Link} to="/generate">Generate Invoice</NavLink>
+                        <NavLink as={Link} to="contactus">ContactUs</NavLink>
                     </Nav>
                 </NavbarCollapse>
             </Container>
