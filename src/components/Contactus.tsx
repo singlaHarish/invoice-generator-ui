@@ -2,7 +2,7 @@ import React from "react"
 
 const Contactus = () => {
     return (
-        <div className="contact-container">
+        <div>
             <h2>Contact Us</h2>
             <p>If you have any questions or need support, feel free to reach us at:</p>
             <p>

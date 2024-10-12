@@ -11,20 +11,24 @@ $hover-color: #f1c40f; // Golden yellow for a more visible hover state
 $accent-color: #4db8b4; // Teal for highlights
 $text-color-dark: #2b3a42; // Dark navy for paragraph text (darker for readability)
 
+
 html, body {
   height: 100%;
-  margin: 0;
 }
 
-.home {
-  font-family: Arial, sans-serif;
+#root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-main {
-  flex-grow: 1;
+.main-content {
+  flex: 1;
+}
+
+
+.home {
+  font-family: Arial, sans-serif;
 }
 
 .menu-links {
@@ -46,11 +50,8 @@ h2 {
   color: $text-color-dark;
 }
 
-p {
-  font-size: 1.2rem;
-}
-
 .welcomepage {
+  font-size: 1.2rem;
   /* Animation styles */
   opacity: 0;
   transform: translateY(20px);
@@ -70,10 +71,6 @@ p {
     transform: translateY(0);
     /* Ends at its original position */
   }
-}
-
-footer {
-  margin-top: auto;
 }
 
 /* Responsive Styles */
