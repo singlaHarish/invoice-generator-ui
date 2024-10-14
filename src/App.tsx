@@ -5,6 +5,7 @@ import Contactus from './components/Contactus';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import GenerateInvoice from './components/GenerateInvoice';
 
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/generate" element={<Home />} />
+          <Route path="/generate" element={<GenerateInvoice />} />
           <Route path='/contactus' element={<Contactus />} />
         </Routes>
       <Footer/>
