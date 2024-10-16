@@ -1,6 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Taviraj:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 // Variables
 $primary-color: #2b3a42; // Dark Navy for backgrounds and footers
@@ -72,6 +72,16 @@ h2 {
     transform: translateY(0);
     /* Ends at its original position */
   }
+}
+
+.invoice-form-container {
+  font-family: "Taviraj",ital;
+  background-color: #ffffff; /* White background for the form */
+  padding: 30px; /* Add padding inside the container */
+  border: 1px solid #ddd; /* Light gray border for distinction */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a 3D effect */
+  margin-top: 20px; /* Space from the top */
 }
 
 /* Responsive Styles */
