@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { Button, Col, Container, Form, FormControl, InputGroup, Row } from "react-bootstrap"
-import { BsCheck2Circle, BsPencilSquare, BsFillPlusCircleFill } from "react-icons/bs";
-import { CustomerDetails } from "../models/InvoiceModels";
-import { enterpriseName } from "../support/Constants";
+import { Button, Col, Container, Form, FormControl, FormGroup, FormLabel, InputGroup, Row } from "react-bootstrap"
+import { BsCheck2Circle, BsPencilSquare, BsFillPlusCircleFill, BsFillTrash3Fill } from "react-icons/bs";
+import { CustomerDetails, MemoItem } from "../models/InvoiceModels";
+import { enterpriseName, itemSubTypeOptions, itemTypeOptions } from "../support/Constants";
 
 
 const GenerateInvoice = () => {
@@ -12,6 +12,7 @@ const GenerateInvoice = () => {
         contact: ''
     });
     const [isCustomerDetailsEditable, setIsCustomerDetailsEditable] = useState(true);
+    const [memoItems, setMemoItems] = useState<MemoItem[]>([]);
 
     // Function to handle customer details change
     const handleCustomerDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,11 +34,33 @@ const GenerateInvoice = () => {
         return `${customerName}, ${address}, ${contact}`;
     };
 
-    const [items, setItems] = useState<string[]>([])
 
-    // Add a new item
-    const handleAddItem = () => {
-        setItems([...items, `Item ${items.length + 1}`]);
+    // Add a new Memo item
+    const handleAddMemoItem = () => {
+        setMemoItems([...memoItems, { itemType: '', itemSubType: '', ratePerItem: '', quantity: '', price: '' }]);
+    };
+
+    const handleInputChange = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = event.target;
+        const newItems = [...memoItems];
+        newItems[index][name as keyof MemoItem] = value;
+
+        // Clear the second attribute if the first attribute changes
+        if (name === 'itemType') {
+            newItems[index].itemSubType = '';
+        }
+
+        // Convert ratePerItem and quantity to numbers for arithmetic operations
+        const ratePerItem = parseFloat(newItems[index].ratePerItem) || 0;
+        const quantity = parseFloat(newItems[index].quantity) || 0;
+        newItems[index].price = (ratePerItem * quantity).toFixed(2);
+
+        setMemoItems(newItems);
+    }
+
+    const handleRemoveItem = (index: number) => {
+        const newItems = memoItems.filter((_, i) => i !== index);
+        setMemoItems(newItems);
     };
 
     return (
@@ -105,25 +128,104 @@ const GenerateInvoice = () => {
                         </InputGroup>
                     </Col>
                 </Row>
-                {items.map((item, index) => (
-                    <Row key={index} className="align-items-center mb-3">
-                        <Col md={12}>
-                            <InputGroup>
+                {/* {memoItems.length > 0 && <Row className="mb-3">
+                    <Col md={3}>
+                        <FormLabel>Item Type</FormLabel>
+                    </Col>
+                    <Col md={3}>
+                        <FormLabel>Item Sub Type</FormLabel>
+                    </Col>
+                    <Col md={2}>
+                        <FormLabel>Price per Qty.</FormLabel>
+                    </Col>
+                    <Col md={1}>
+                        <FormLabel>Qty.</FormLabel>
+                    </Col>
+                    <Col md={2}>
+                        <FormLabel>Price</FormLabel>
+                    </Col>
+                </Row>} */}
+                {memoItems.map((memoItem, index) => (
+                    <Row key={index} className="mb-3">
+                        <Col md={3}>
+                            <FormGroup controlId="{`itemtype-${index}`}">
+                                <FormControl
+                                    as="select"
+                                    name="itemType"
+                                    value={memoItem.itemType}
+                                    onChange={(e) => handleInputChange(index, e)}
+                                >
+                                    <option value="">Select Item Type</option>
+                                    {itemTypeOptions.map((itemTypeOption) => (
+                                        <option key={itemTypeOption} value={itemTypeOption}>
+                                            {itemTypeOption}
+                                        </option>
+                                    ))}
+                                </FormControl>
+                            </FormGroup>
+                        </Col>
+                        <Col md={2}>
+                            <Form.Group controlId={`itemsubtype-${index}`}>
+                                <Form.Control
+                                    as="select"
+                                    name="itemSubType"
+                                    value={memoItem.itemSubType}
+                                    onChange={(e) => handleInputChange(index, e)}
+                                    disabled={!memoItem.itemType}
+                                >
+                                    <option value="">Select Item Sub Type</option>
+                                    {memoItem.itemType &&
+                                        itemSubTypeOptions[memoItem.itemType as keyof typeof itemSubTypeOptions].map((ItemSubTypeOption) => (
+                                            <option key={ItemSubTypeOption} value={ItemSubTypeOption}>
+                                                {ItemSubTypeOption}
+                                            </option>
+                                        ))}
+                                </Form.Control>
+                            </Form.Group>
+                        </Col>
+                        <Col md={2}>
+                            <FormGroup controlId={`pricePerQty-${index}`}>
+                                <FormControl
+                                    type="number"
+                                    name="ratePerItem"
+                                    value={memoItem.ratePerItem}
+                                    onChange={(e) => handleInputChange(index, e)}
+                                    placeholder="Price per Qty."
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col md={2}>
+                            <FormGroup controlId={`quantity-${index}`}>
+                                <FormControl
+                                    type="number"
+                                    name="quantity"
+                                    value={memoItem.quantity}
+                                    onChange={(e) => handleInputChange(index, e)}
+                                    placeholder="Qty."
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col md={2}>
+                            <FormGroup controlId={`price-${index}`}>
                                 <FormControl
                                     type="text"
-                                    value={item}
+                                    name="price"
+                                    value={memoItem.price}
                                     readOnly
-                                    className="form-control"
+                                    placeholder="Price"
                                 />
-                            </InputGroup>
+                            </FormGroup>
+                        </Col>
+                        <Col md={1}>
+                            <BsFillTrash3Fill onClick={() => handleRemoveItem(index)} />
                         </Col>
                     </Row>
                 ))}
                 <Row>
-                    <Col md={1}>
+                    <Col md={1} className="d-flex align-items-center">
                         <Button variant="secondary" style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-                            onClick={handleAddItem}>
-                            <BsFillPlusCircleFill style={{ marginRight: "12px" }} />
+                            onClick={handleAddMemoItem}>
+                            <BsFillPlusCircleFill style={{ marginRight: "8px" }} />
                             Add
                         </Button>
                     </Col>
