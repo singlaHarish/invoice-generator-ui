@@ -11,7 +11,7 @@ const GenerateInvoice = () => {
         address: '',
         contact: ''
     });
-    const [isCustomerDetailsEditable, setIsCustomerDetailsEditable] = useState(true);
+    const [isInvoiceEditable, setIsInvoiceEditable] = useState(true);
     const [memoItems, setMemoItems] = useState<MemoItem[]>([]);
 
     // Function to handle customer details change
@@ -24,8 +24,8 @@ const GenerateInvoice = () => {
     };
 
     // Toggle the editability of the fields
-    const toggleCustomerDetailsEdit = () => {
-        setIsCustomerDetailsEditable(!isCustomerDetailsEditable);
+    const toggleInvoiceEdit = () => {
+        setIsInvoiceEditable(!isInvoiceEditable);
     }
 
     // Get concatenated customer details as a single string
@@ -67,17 +67,15 @@ const GenerateInvoice = () => {
         <Container>
             <h2 className="mt-3">Prepare your Invoice here!</h2>
             <Row>
-                <Col md={11}>
-                </Col>
-                <Col md={1}>
-                    {!isCustomerDetailsEditable && (
+                <Col className="text-end">
+                    {!isInvoiceEditable && (
                         <BsPencilSquare
-                            onClick={toggleCustomerDetailsEdit}
+                            onClick={toggleInvoiceEdit}
                         />
                     )}
-                    {isCustomerDetailsEditable && (
+                    {isInvoiceEditable && (
                         <BsCheck2Circle
-                            onClick={toggleCustomerDetailsEdit}
+                            onClick={toggleInvoiceEdit}
                         />
                     )}
                 </Col>
@@ -107,7 +105,7 @@ const GenerateInvoice = () => {
                                 name="customerName"
                                 value={customerDetails.customerName}
                                 onChange={handleCustomerDetailsChange}
-                                readOnly={!isCustomerDetailsEditable}
+                                disabled={!isInvoiceEditable}
                                 className="form-control"
                             />
                         </InputGroup>
@@ -122,13 +120,13 @@ const GenerateInvoice = () => {
                                 name="address"
                                 value={customerDetails.address}
                                 onChange={handleCustomerDetailsChange}
-                                readOnly={!isCustomerDetailsEditable}
+                                disabled={!isInvoiceEditable}
                                 className="form-control"
                             />
                         </InputGroup>
                     </Col>
                 </Row>
-                {/* {memoItems.length > 0 && <Row className="mb-3">
+                {memoItems.length > 0 && <Row className="mb-1 text-center">
                     <Col md={3}>
                         <FormLabel>Item Type</FormLabel>
                     </Col>
@@ -144,7 +142,7 @@ const GenerateInvoice = () => {
                     <Col md={2}>
                         <FormLabel>Price</FormLabel>
                     </Col>
-                </Row>} */}
+                </Row>}
                 {memoItems.map((memoItem, index) => (
                     <Row key={index} className="mb-3">
                         <Col md={3}>
@@ -154,6 +152,7 @@ const GenerateInvoice = () => {
                                     name="itemType"
                                     value={memoItem.itemType}
                                     onChange={(e) => handleInputChange(index, e)}
+                                    disabled={!isInvoiceEditable}
                                 >
                                     <option value="">Select Item Type</option>
                                     {itemTypeOptions.map((itemTypeOption) => (
@@ -164,14 +163,14 @@ const GenerateInvoice = () => {
                                 </FormControl>
                             </FormGroup>
                         </Col>
-                        <Col md={2}>
+                        <Col md={3}>
                             <Form.Group controlId={`itemsubtype-${index}`}>
                                 <Form.Control
                                     as="select"
                                     name="itemSubType"
                                     value={memoItem.itemSubType}
                                     onChange={(e) => handleInputChange(index, e)}
-                                    disabled={!memoItem.itemType}
+                                    disabled={!isInvoiceEditable || !memoItem.itemType}
                                 >
                                     <option value="">Select Item Sub Type</option>
                                     {memoItem.itemType &&
@@ -191,10 +190,11 @@ const GenerateInvoice = () => {
                                     value={memoItem.ratePerItem}
                                     onChange={(e) => handleInputChange(index, e)}
                                     placeholder="Price per Qty."
+                                    disabled={!isInvoiceEditable}
                                 />
                             </FormGroup>
                         </Col>
-                        <Col md={2}>
+                        <Col md={1}>
                             <FormGroup controlId={`quantity-${index}`}>
                                 <FormControl
                                     type="number"
@@ -202,6 +202,7 @@ const GenerateInvoice = () => {
                                     value={memoItem.quantity}
                                     onChange={(e) => handleInputChange(index, e)}
                                     placeholder="Qty."
+                                    disabled={!isInvoiceEditable}
                                 />
                             </FormGroup>
                         </Col>
@@ -213,15 +214,16 @@ const GenerateInvoice = () => {
                                     value={memoItem.price}
                                     readOnly
                                     placeholder="Price"
+                                    disabled={!isInvoiceEditable}
                                 />
                             </FormGroup>
                         </Col>
-                        <Col md={1}>
+                        {isInvoiceEditable && <Col md={1}>
                             <BsFillTrash3Fill onClick={() => handleRemoveItem(index)} />
-                        </Col>
+                        </Col>}
                     </Row>
                 ))}
-                <Row>
+                {isInvoiceEditable && <Row>
                     <Col md={1} className="d-flex align-items-center">
                         <Button variant="secondary" style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
                             onClick={handleAddMemoItem}>
@@ -229,7 +231,7 @@ const GenerateInvoice = () => {
                             Add
                         </Button>
                     </Col>
-                </Row>
+                </Row>}
             </Form>
         </Container>
     )
