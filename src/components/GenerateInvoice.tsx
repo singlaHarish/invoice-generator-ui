@@ -100,6 +100,7 @@ const GenerateInvoice = () => {
                     <Col md={12}>
                         <InputGroup>
                             <Form.Control
+                                required
                                 type="text"
                                 placeholder="Enter customer name"
                                 name="customerName"
@@ -115,6 +116,7 @@ const GenerateInvoice = () => {
                     <Col md={12}>
                         <InputGroup>
                             <Form.Control
+                                required
                                 type="text"
                                 placeholder="Enter customer's address"
                                 name="address"
@@ -134,7 +136,7 @@ const GenerateInvoice = () => {
                         <FormLabel>Item Sub Type</FormLabel>
                     </Col>
                     <Col md={2}>
-                        <FormLabel>Price per Qty.</FormLabel>
+                        <FormLabel>Rate</FormLabel>
                     </Col>
                     <Col md={1}>
                         <FormLabel>Qty.</FormLabel>
@@ -183,16 +185,17 @@ const GenerateInvoice = () => {
                             </Form.Group>
                         </Col>
                         <Col md={2}>
-                            <FormGroup controlId={`pricePerQty-${index}`}>
+                            <InputGroup>
+                                <InputGroup.Text id="INR-symbol">₹</InputGroup.Text>
                                 <FormControl
                                     type="number"
                                     name="ratePerItem"
                                     value={memoItem.ratePerItem}
                                     onChange={(e) => handleInputChange(index, e)}
-                                    placeholder="Price per Qty."
+                                    placeholder="Rate"
                                     disabled={!isInvoiceEditable}
                                 />
-                            </FormGroup>
+                            </InputGroup>
                         </Col>
                         <Col md={1}>
                             <FormGroup controlId={`quantity-${index}`}>
@@ -207,7 +210,8 @@ const GenerateInvoice = () => {
                             </FormGroup>
                         </Col>
                         <Col md={2}>
-                            <FormGroup controlId={`price-${index}`}>
+                            <InputGroup>
+                                <InputGroup.Text id="INR-symbol">₹</InputGroup.Text>
                                 <FormControl
                                     type="text"
                                     name="price"
@@ -216,7 +220,7 @@ const GenerateInvoice = () => {
                                     placeholder="Price"
                                     disabled={!isInvoiceEditable}
                                 />
-                            </FormGroup>
+                            </InputGroup>
                         </Col>
                         {isInvoiceEditable && <Col md={1}>
                             <BsFillTrash3Fill onClick={() => handleRemoveItem(index)} />
