@@ -14,6 +14,10 @@ const GenerateInvoice = () => {
         setShowInvoiceForm(true)
     }
 
+    const handleReturnToGenerateInvoice = () => {
+        setShowInvoiceForm(false)
+    }
+
     return (
         <>
             {!showInvoiceForm && (<Card className="mt-3 ms-3 me-5 content">
@@ -22,7 +26,7 @@ const GenerateInvoice = () => {
                     <Button className="mt-3" variant="primary" onClick={handleGetStartedClick}>Get Started!!</Button>
                 </Card.Body>
             </Card>)}
-            {showInvoiceForm && (<InvoiceForm />)}
+            {showInvoiceForm && (<InvoiceForm onClickArrowLeft={handleReturnToGenerateInvoice}/>)}
         </>
 
     )

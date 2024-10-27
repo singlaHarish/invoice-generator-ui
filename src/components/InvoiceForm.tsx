@@ -1,10 +1,15 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { Button, Col, Container, Form, FormControl, FormGroup, FormLabel, InputGroup, Row } from "react-bootstrap"
-import { BsCheck2Circle, BsPencilSquare, BsFillPlusCircleFill, BsFillTrash3Fill } from "react-icons/bs";
+import { BsCheck2Circle, BsPencilSquare, BsFillPlusCircleFill, BsFillTrash3Fill, BsArrowLeftCircle, BsArrowCounterclockwise } from "react-icons/bs";
 import { CustomerDetails, MemoItem } from "../models/InvoiceModels";
 import { enterpriseName, itemSubTypeOptions, itemTypeOptions } from "../support/Constants";
 
-const InvoiceForm = () => {
+interface InvoiceFormProps {
+    onClickArrowLeft: () => void;
+}
+
+
+const InvoiceForm = ({ onClickArrowLeft }: InvoiceFormProps) => {
     const [customerDetails, setCustomerDetails] = useState<CustomerDetails>({
         customerName: '',
         address: '',
@@ -12,6 +17,9 @@ const InvoiceForm = () => {
     });
     const [isInvoiceEditable, setIsInvoiceEditable] = useState(true);
     const [memoItems, setMemoItems] = useState<MemoItem[]>([]);
+    const [validated, setValidated] = useState(false);
+
+    const formRef = useRef<HTMLFormElement>(null);
 
     // Function to handle customer details change
     const handleCustomerDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,23 +70,47 @@ const InvoiceForm = () => {
         setMemoItems(newItems);
     };
 
+    const handleReset = () => {
+        // If the form reference exists, reset the form
+        if (formRef.current) {
+            formRef.current.reset();
+        }
+        setCustomerDetails({ customerName: '', address: '', contact: '' });
+        setMemoItems([]); // Clear the memo items
+        setIsInvoiceEditable(true)
+    };
+
+    const handleSaveInvoiceForm = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault(); // Prevent default form submission
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            setValidated(true);
+            toggleInvoiceEdit()
+        }
+    }
+
     return (
         <Container>
             <Row>
                 <Col className="text-end">
+                    <BsArrowLeftCircle className="me-2" onClick={onClickArrowLeft} />
+                    <BsArrowCounterclockwise className="me-2" onClick={handleReset} />
                     {!isInvoiceEditable && (
-                        <BsPencilSquare
+                        <BsPencilSquare className="me-2"
                             onClick={toggleInvoiceEdit}
                         />
                     )}
                     {isInvoiceEditable && (
-                        <BsCheck2Circle
-                            onClick={toggleInvoiceEdit}
+                        <BsCheck2Circle className="me-2"
+                            onClick={() => formRef.current?.dispatchEvent(new Event('submit', { bubbles: true }))}
                         />
                     )}
                 </Col>
             </Row>
-            <Form className="invoice-form-container">
+            <Form noValidate validated={validated} ref={formRef} className="invoice-form-container" onSubmit={handleSaveInvoiceForm}>
                 <Row className="align-items-center mb-3">
                     <Col md={10}>
                         <Form.Control
@@ -107,6 +139,9 @@ const InvoiceForm = () => {
                                 disabled={!isInvoiceEditable}
                                 className="form-control"
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Please enter a valid customer name.
+                            </Form.Control.Feedback>
                         </InputGroup>
                     </Col>
                 </Row>
@@ -123,6 +158,9 @@ const InvoiceForm = () => {
                                 disabled={!isInvoiceEditable}
                                 className="form-control"
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Please enter a valid address.
+                            </Form.Control.Feedback>
                         </InputGroup>
                     </Col>
                 </Row>
@@ -148,6 +186,7 @@ const InvoiceForm = () => {
                         <Col md={3}>
                             <FormGroup controlId="{`itemtype-${index}`}">
                                 <FormControl
+                                    required
                                     as="select"
                                     name="itemType"
                                     value={memoItem.itemType}
@@ -163,9 +202,10 @@ const InvoiceForm = () => {
                                 </FormControl>
                             </FormGroup>
                         </Col>
-                        <Col md={3}>
+                        <Col md={2}>
                             <Form.Group controlId={`itemsubtype-${index}`}>
                                 <Form.Control
+                                    required
                                     as="select"
                                     name="itemSubType"
                                     value={memoItem.itemSubType}
@@ -186,6 +226,7 @@ const InvoiceForm = () => {
                             <InputGroup>
                                 <InputGroup.Text id="INR-symbol">₹</InputGroup.Text>
                                 <FormControl
+                                    required
                                     type="number"
                                     name="ratePerItem"
                                     value={memoItem.ratePerItem}
@@ -195,9 +236,10 @@ const InvoiceForm = () => {
                                 />
                             </InputGroup>
                         </Col>
-                        <Col md={1}>
+                        <Col md={2}>
                             <FormGroup controlId={`quantity-${index}`}>
                                 <FormControl
+                                    required
                                     type="number"
                                     name="quantity"
                                     value={memoItem.quantity}
