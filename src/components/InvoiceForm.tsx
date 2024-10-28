@@ -2,7 +2,8 @@ import React, { useRef, useState } from "react"
 import { Button, Col, Container, Form, FormControl, FormGroup, FormLabel, InputGroup, Row } from "react-bootstrap"
 import { BsCheck2Circle, BsPencilSquare, BsFillPlusCircleFill, BsFillTrash3Fill, BsArrowLeftCircle, BsArrowCounterclockwise } from "react-icons/bs";
 import { CustomerDetails, MemoItem } from "../models/InvoiceModels";
-import { enterpriseName, itemSubTypeOptions, itemTypeOptions } from "../support/Constants";
+import { enterpriseName, gst, itemSubTypeOptions, itemTypeOptions, subTotal, totalBill } from "../support/Constants";
+import { calculateFinalBill, calculateGST, calculateSubTotal } from "../support/InvoiceFormSupport";
 
 interface InvoiceFormProps {
     onClickArrowLeft: () => void;
@@ -91,6 +92,11 @@ const InvoiceForm = ({ onClickArrowLeft }: InvoiceFormProps) => {
             toggleInvoiceEdit()
         }
     }
+
+    // Calculate subtotal
+    const subTotalAmount = calculateSubTotal(memoItems);
+    // Calculate GST based on the subtotal
+    const gstAmount = calculateGST(subTotalAmount, 18);
 
     return (
         <Container>
@@ -276,6 +282,78 @@ const InvoiceForm = ({ onClickArrowLeft }: InvoiceFormProps) => {
                         </Button>
                     </Col>
                 </Row>}
+                {memoItems.length > 0 && !isInvoiceEditable &&
+                    <Row className="mb-3">
+                        <Col md={2}>
+                            <Form.Control
+                                type="text"
+                                value={subTotal}
+                                readOnly
+                                plaintext
+                            />
+                        </Col>
+                        <Col md={9}>
+                            <InputGroup>
+                                <InputGroup.Text id="INR-symbol">₹</InputGroup.Text>
+                                <FormControl
+                                    type="text"
+                                    name="subtotal"
+                                    value={subTotalAmount}
+                                    readOnly
+                                    disabled={!isInvoiceEditable}
+                                />
+                            </InputGroup>
+                        </Col>
+                    </Row>
+                }
+                {memoItems.length > 0 && !isInvoiceEditable &&
+                    <Row className="mb-3">
+                        <Col md={2}>
+                            <Form.Control
+                                type="text"
+                                value={gst}
+                                readOnly
+                                plaintext
+                            />
+                        </Col>
+                        <Col md={9}>
+                            <InputGroup>
+                                <InputGroup.Text id="INR-symbol">₹</InputGroup.Text>
+                                <FormControl
+                                    type="text"
+                                    name="gstamount"
+                                    value={gstAmount}
+                                    readOnly
+                                    disabled={!isInvoiceEditable}
+                                />
+                            </InputGroup>
+                        </Col>
+                    </Row>
+                }
+                {memoItems.length > 0 && !isInvoiceEditable &&
+                    <Row>
+                        <Col md={2}>
+                            <Form.Control
+                                type="text"
+                                value={totalBill}
+                                readOnly
+                                plaintext
+                            />
+                        </Col>
+                        <Col md={9}>
+                            <InputGroup>
+                                <InputGroup.Text id="INR-symbol">₹</InputGroup.Text>
+                                <FormControl
+                                    type="text"
+                                    name="totalbill"
+                                    value={calculateFinalBill(subTotalAmount, gstAmount)}
+                                    readOnly
+                                    disabled={!isInvoiceEditable}
+                                />
+                            </InputGroup>
+                        </Col>
+                    </Row>
+                }
             </Form>
         </Container>
     )

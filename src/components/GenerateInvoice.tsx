@@ -23,7 +23,7 @@ const GenerateInvoice = () => {
             {!showInvoiceForm && (<Card className="mt-3 ms-3 me-5 content">
                 <Card.Body>
                     <Card.Title as="h2">Prepare your Invoice here!</Card.Title>
-                    <Button className="mt-3" variant="primary" onClick={handleGetStartedClick}>Get Started!!</Button>
+                    <Button className="mt-3" variant="secondary" onClick={handleGetStartedClick}>Get Started!!</Button>
                 </Card.Body>
             </Card>)}
             {showInvoiceForm && (<InvoiceForm onClickArrowLeft={handleReturnToGenerateInvoice}/>)}

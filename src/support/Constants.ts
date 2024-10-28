@@ -1,6 +1,12 @@
 
 export const enterpriseName = 'M/S. Skyline Invoices Pvt. Ltd.';
 
+export const subTotal = 'Sub Total:';
+
+export const gst = 'GST@18%';
+
+export const totalBill = 'Total Bill Amt.';
+
 // Options for the first dropdown
 export const itemTypeOptions = ['Plain Glass', 'Toughened Glass', 'Mirror Glass'];
 
