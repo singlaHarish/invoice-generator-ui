@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
 import { Button, Col, Container, Form, FormControl, FormGroup, FormLabel, InputGroup, Row } from "react-bootstrap"
-import { BsCheck2Circle, BsPencilSquare, BsFillPlusCircleFill, BsFillTrash3Fill, BsArrowLeftCircle, BsArrowCounterclockwise } from "react-icons/bs";
+import { BsCheck2Circle, BsPencilSquare, BsFillPlusCircleFill, BsFillTrash3Fill, BsArrowLeftCircle, BsArrowCounterclockwise, BsFileEarmarkPdf } from "react-icons/bs";
 import { CustomerDetails, MemoItem } from "../models/InvoiceModels";
 import { enterpriseName, gst, itemSubTypeOptions, itemTypeOptions, subTotal, totalBill } from "../support/Constants";
 import { calculateFinalBill, calculateGST, calculateSubTotal } from "../support/InvoiceFormSupport";
@@ -114,6 +114,9 @@ const InvoiceForm = ({ onClickArrowLeft }: InvoiceFormProps) => {
                             onClick={() => formRef.current?.dispatchEvent(new Event('submit', { bubbles: true }))}
                         />
                     )}
+                    {!isInvoiceEditable && memoItems.length > 0 && (
+                        <BsFileEarmarkPdf className="me-2"/>
+                    )}
                 </Col>
             </Row>
             <Form noValidate validated={validated} ref={formRef} className="invoice-form-container" onSubmit={handleSaveInvoiceForm}>
@@ -218,7 +221,7 @@ const InvoiceForm = ({ onClickArrowLeft }: InvoiceFormProps) => {
                                     onChange={(e) => handleInputChange(index, e)}
                                     disabled={!isInvoiceEditable || !memoItem.itemType}
                                 >
-                                    <option value="">Select Item Sub Type</option>
+                                    <option value="">Select Sub Type</option>
                                     {memoItem.itemType &&
                                         itemSubTypeOptions[memoItem.itemType as keyof typeof itemSubTypeOptions].map((ItemSubTypeOption) => (
                                             <option key={ItemSubTypeOption} value={ItemSubTypeOption}>
