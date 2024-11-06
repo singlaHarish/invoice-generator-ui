@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import { Button, Col, Container, Form, FormControl, FormGroup, FormLabel, InputGroup, Row } from "react-bootstrap"
-import { BsCheck2Circle, BsPencilSquare, BsFillPlusCircleFill, BsFillTrash3Fill, BsArrowLeftCircle, BsArrowCounterclockwise, BsFileEarmarkPdf } from "react-icons/bs";
-import { CustomerDetails, MemoItem } from "../models/InvoiceModels";
+import { BsCheck2Circle, BsPencilSquare, BsFillPlusCircleFill, BsFillTrash3Fill, BsArrowLeftCircle, BsArrowCounterclockwise, BsFileEarmarkPdf, BsDatabaseAdd  } from "react-icons/bs";
+import { CustomerDetails, MemoDetails, MemoItem } from "../models/InvoiceModels";
 import { enterpriseName, gst, itemSubTypeOptions, itemTypeOptions, subTotal, totalBill } from "../support/Constants";
 import { calculateFinalBill, calculateGST, calculateSubTotal } from "../support/InvoiceFormSupport";
+import { useReactToPrint } from "react-to-print";
+import { useSaveMemoDetailsMutation } from "../api/invoice-generator-api";
 
 interface InvoiceFormProps {
     onClickArrowLeft: () => void;
@@ -21,6 +23,7 @@ const InvoiceForm = ({ onClickArrowLeft }: InvoiceFormProps) => {
     const [validated, setValidated] = useState(false);
 
     const formRef = useRef<HTMLFormElement>(null);
+    const [saveMemoDetails] = useSaveMemoDetailsMutation()
 
     // Function to handle customer details change
     const handleCustomerDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,9 +97,30 @@ const InvoiceForm = ({ onClickArrowLeft }: InvoiceFormProps) => {
     }
 
     // Calculate subtotal
-    const subTotalAmount = calculateSubTotal(memoItems);
+    const subTotalAmount = useMemo(() => calculateSubTotal(memoItems), [memoItems]);
     // Calculate GST based on the subtotal
-    const gstAmount = calculateGST(subTotalAmount, 18);
+    const gstAmount = useMemo(() => calculateGST(subTotalAmount, 18), [subTotalAmount]);
+    // Calculate final bill
+    const finalBill = useMemo(() => calculateFinalBill(subTotalAmount, gstAmount), [subTotalAmount, gstAmount]);
+
+    const handlePrint = useReactToPrint({
+        contentRef: formRef,
+    })
+
+    const handleSaveToDatabase = async () => {
+        try {
+            const response = await saveMemoDetails({
+               customerName: customerDetails.customerName,
+               address: customerDetails.address,
+               contact: customerDetails.contact,
+               invoiceDate: new Date().toLocaleDateString(),
+               billAmount: finalBill.toString(),
+               memoItems: memoItems
+            }).unwrap()
+        } catch(error) {
+            console.error('Error saving memo details:', error)
+        }
+    }
 
     return (
         <Container>
@@ -115,7 +139,10 @@ const InvoiceForm = ({ onClickArrowLeft }: InvoiceFormProps) => {
                         />
                     )}
                     {!isInvoiceEditable && memoItems.length > 0 && (
-                        <BsFileEarmarkPdf className="me-2"/>
+                        <BsFileEarmarkPdf className="me-2" onClick={() => handlePrint()}/>
+                    )}
+                    {!isInvoiceEditable && memoItems.length > 0 && (
+                        <BsDatabaseAdd className="me-2" onClick={() => handleSaveToDatabase()}/>
                     )}
                 </Col>
             </Row>
@@ -349,7 +376,7 @@ const InvoiceForm = ({ onClickArrowLeft }: InvoiceFormProps) => {
                                 <FormControl
                                     type="text"
                                     name="totalbill"
-                                    value={calculateFinalBill(subTotalAmount, gstAmount)}
+                                    value={finalBill}
                                     readOnly
                                     disabled={!isInvoiceEditable}
                                 />

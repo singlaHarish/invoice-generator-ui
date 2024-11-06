@@ -13,3 +13,12 @@ export interface MemoItem {
     price: string;
 }
 
+export interface MemoDetails {
+    customerName: string
+    address: string
+    contact: string
+    invoiceDate: string
+    billAmount: string
+    memoItems: MemoItem[]
+}
+

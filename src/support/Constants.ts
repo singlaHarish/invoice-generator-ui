@@ -17,3 +17,5 @@ export const itemSubTypeOptions = {
     'Mirror Glass': ['4MM', '5MM']
 };
 
+export const invoice_api_base_url = "http://127.0.0.1:8000"
+
