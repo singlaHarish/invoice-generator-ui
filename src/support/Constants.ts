@@ -17,5 +17,5 @@ export const itemSubTypeOptions = {
     'Mirror Glass': ['4MM', '5MM']
 };
 
-export const invoice_api_base_url = process.env.INVOICE_API_BASE_URL!
+export const invoice_api_base_url = process.env.REACT_APP_INVOICE_API_BASE_URL!
 
