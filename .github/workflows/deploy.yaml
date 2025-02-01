@@ -24,7 +24,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
-          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/invoice-generator-ui invoice-generator-backend:latest .
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/invoice-generator-ui/invoice-generator-ui:latest .
           docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/invoice-generator-ui/invoice-generator-ui:latest
 
       - name: Deploy to Cloud Run
