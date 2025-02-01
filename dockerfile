@@ -14,10 +14,10 @@ COPY . .
 # Build the app
 RUN npm run build
 
-# Serve the React app using a lightweight web server
-RUN npm install -g serve
-CMD ["serve", "-s", "build", "-l", "8080"]
-
 # Expose port  8080
 EXPOSE 8080
+
+# Start the app using the custom command
+CMD ["npm", "run", "start:prod"]
+
 
